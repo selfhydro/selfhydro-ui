@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: latest
+
+inputs:
+- name: selfhydro-ui
+
+outputs:
+- name: selfhydro-ui-build
+
+run:
+  path: selfhydro-ui/.ci/build.sh
+
+params:
+  VERSION: version

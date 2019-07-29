@@ -1,0 +1,100 @@
+---
+resource_types:
+  - name: google-cloud-storage
+    type: docker-image
+    source:
+      repository: frodenas/gcs-resource
+
+resources:
+- name: selfhydro-ui
+  type: git
+  source:
+    uri: https://github.com:selfhydro/selfhydro-ui.git
+
+- name: version
+  type: semver
+  source:
+    driver: gcs
+    bucket: selfhydro-versions
+    key: selfhydro-ui
+    json_key: |
+      {
+        "type": "service_account",
+        "project_id": "selfhydro-197504",
+        "private_key_id": "((gcs-service_account.private_key_id))",
+        "private_key": "((gcs-service_account.private_key))",
+        "client_email": "((gcs-service_account.client_email))",
+        "client_id": "((gcs-service_account.client_id))",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
+      }
+
+- name: gcs-artifact-bucket
+  type: google-cloud-storage
+  source:
+    bucket: build-artifacts
+    regexp: release-(.*).tar.gz
+    json_key: |
+      {
+        "type": "service_account",
+        "project_id": "selfhydro-197504",
+        "private_key_id": "((gcs-service_account.private_key_id))",
+        "private_key": "((gcs-service_account.private_key))",
+        "client_email": "((gcs-service_account.client_email))",
+        "client_id": "((gcs-service_account.client_id))",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
+      }
+
+- name: selfhydro-ui-bucket
+  type: google-cloud-storage
+  source:
+    bucket: selfhydro-ui
+    regexp: release-(.*).tgz
+    json_key: |
+      {
+        "type": "service_account",
+        "project_id": "selfhydro-197504",
+        "private_key_id": "((gcs-service_account.private_key_id))",
+        "private_key": "((gcs-service_account.private_key))",
+        "client_email": "((gcs-service_account.client_email))",
+        "client_id": "((gcs-service_account.client_id))",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
+      }
+
+jobs:
+  - name: test
+    plan:
+      - get: selfhydro-ui
+        trigger: true
+      - task: unit-test
+        file: selfhydro-ui/.ci/test.yml
+  - name: build
+    plan:
+      - get: selfhydro-ui
+        trigger: true
+        passed: [test]
+      - task: build
+        file: selfhydro-ui/.ci/build.yml
+      - get: version
+        params: {bump: patch}
+      - put: gcs-artifact-bucket
+        params:
+          file: selfhydro-ui-build/selfhydr-ui-release-*.tar.gz
+          predefined_acl: projectPrivate
+  - name: deploy
+    plan:
+      - get: gcs-artifact-bucket
+      - task: spin-up-stuff
+        file: selfhydro-ui/.ci/build.yml
+      - put: selfhydro-ui-bucket
+        params:
+          file: gcs-artifact-bucket
+          predefined_acl: publicRead
