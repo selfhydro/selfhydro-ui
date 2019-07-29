@@ -4,4 +4,4 @@ set -ex
 
 cd ./selfhydro-ui
 npm i
-npm test --cover
+env CI=true npm test -- --collectCoverage
