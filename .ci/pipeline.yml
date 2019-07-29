@@ -9,7 +9,7 @@ resources:
 - name: selfhydro-ui
   type: git
   source:
-    uri: https://github.com:selfhydro/selfhydro-ui.git
+    uri: https://github.com/selfhydro/selfhydro-ui.git
 
 - name: version
   type: semver
@@ -75,25 +75,33 @@ jobs:
       - get: selfhydro-ui
         trigger: true
       - task: unit-test
-        file: selfhydro-ui/.ci/test.yml
+        file: selfhydro-ui/.ci/unit-test.yml
   - name: build
     plan:
       - get: selfhydro-ui
         trigger: true
         passed: [test]
-      - task: build
-        file: selfhydro-ui/.ci/build.yml
       - get: version
         params: {bump: patch}
+      - task: build
+        file: selfhydro-ui/.ci/build.yml
+      - put: version
+        params: {file: version/version}
       - put: gcs-artifact-bucket
         params:
           file: selfhydro-ui-build/selfhydr-ui-release-*.tar.gz
           predefined_acl: projectPrivate
+  - name: deploy-infra
+    plan:
+      - get: selfhydro-ui
+        trigger: true
+        passed: [build]
+      - task: spin-up-stuff
+        file: selfhydro-ui/.ci/build.yml
   - name: deploy
     plan:
       - get: gcs-artifact-bucket
-      - task: spin-up-stuff
-        file: selfhydro-ui/.ci/build.yml
+        passed: [build]
       - put: selfhydro-ui-bucket
         params:
           file: gcs-artifact-bucket
