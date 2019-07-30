@@ -1,4 +1,5 @@
 provider "google" {
+  credentials = "${var.credentials}"
   project = "selfhydro-197504"
   region  = "us-central1"
   zone    = "us-central1-c"

@@ -5,6 +5,13 @@ resource_types:
     source:
       repository: frodenas/gcs-resource
 
+resource_types:
+- name: terraform
+  type: docker-image
+  source:
+    repository: ljfranklin/terraform-resource
+    tag: latest
+
 resources:
 - name: selfhydro-ui
   type: git
@@ -30,6 +37,17 @@ resources:
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
       }
+
+- name: terraform
+  type: terraform
+  source:
+    backend_type: gcs
+    backend_config:
+      vars:
+        credentials: ((gcpServiceAccount.json))
+      bucket: selfhydro-infra-state
+      prefix: selfhydro-ui
+      credentials: ((gcpServiceAccount.json))
 
 - name: gcs-artifact-bucket
   type: google-cloud-storage
@@ -93,12 +111,30 @@ jobs:
         params:
           file: selfhydro-ui-build/selfhydro-ui-release-*.tar.gz
           predefined_acl: projectPrivate
-  - name: deploy-infra
+  - name: terraform-plan
     plan:
       - get: selfhydro-ui
         trigger: true
-      - task: spin-up-stuff
-        file: selfhydro-ui/.ci/deploy-infra.yml
+      - put: terraform
+        params:
+          var_files: [selfhydro-ui/infra/prod.tfvars]
+          terraform_source: selfhydro-ui/infra
+          env_name: prod
+          plan_only: true
+  - name: terraform-apply
+    plan:
+      - get: selfhydro-ui
+        trigger: true
+        passed: [terraform-plan]
+      - get: terraform
+        trigger: false
+        passed: [terraform-plan]
+      - put: terraform
+        params:
+          var_files: [selfhydro-ui/infra/prod.tfvars]
+          terraform_source: selfhydro-ui/infra
+          env_name: prod
+          plan_run: true
   - name: deploy
     plan:
       - get: gcs-artifact-bucket
