@@ -21,6 +21,17 @@ resource "google_storage_bucket" "selfhydro-ui-bucket" {
     }
 }
 
+resource "google_storage_bucket" "selfhydro-build-artifacts" {
+    name = "selfhydro-build-artifacts"
+    location = "${var.bucket_location}"
+    project = "${var.project_id}"
+    storage_class = "${var.bucket_storage_class}"
+
+    versioning {
+        enabled = "${var.bucket_versioning}"
+    }
+}
+
 output "gcp_credentials" {
   value       = google.credentials
   description = "The credentials for authenticating with gcp."

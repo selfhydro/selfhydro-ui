@@ -52,7 +52,7 @@ resources:
 - name: gcs-artifact-bucket
   type: google-cloud-storage
   source:
-    bucket: build-artifacts
+    bucket: selfhydro-build-artifacts
     regexp: release-(.*).tar.gz
     json_key: |
       {
@@ -124,7 +124,6 @@ jobs:
   - name: terraform-apply
     plan:
       - get: selfhydro-ui
-        trigger: true
         passed: [terraform-plan]
       - get: terraform
         trigger: false
