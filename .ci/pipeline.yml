@@ -42,9 +42,9 @@ resources:
   type: terraform
   source:
     backend_type: gcs
+    vars:
+      credentials: ((gcpServiceAccount.json))
     backend_config:
-      vars:
-        credentials: ((gcpServiceAccount.json))
       bucket: selfhydro-infra-state
       prefix: selfhydro-ui
       credentials: ((gcpServiceAccount.json))

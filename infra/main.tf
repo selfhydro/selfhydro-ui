@@ -20,3 +20,9 @@ resource "google_storage_bucket" "selfhydro-ui-bucket" {
         not_found_page = "${var.not_found_page}"
     }
 }
+
+output "gcp_credentials" {
+  value       = google.credentials
+  description = "The credentials for authenticating with gcp."
+  sensitive   = true
+}

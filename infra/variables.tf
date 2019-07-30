@@ -1,3 +1,7 @@
+variable "credentials" {
+  default = ""
+}
+
 variable "bucket_name" {
     description = "Name of bucket that will store the static website. Should match your website domain name"
 }
