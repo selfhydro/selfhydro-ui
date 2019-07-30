@@ -97,9 +97,8 @@ jobs:
     plan:
       - get: selfhydro-ui
         trigger: true
-        passed: [build]
       - task: spin-up-stuff
-        file: selfhydro-ui/.ci/build.yml
+        file: selfhydro-ui/.ci/deploy-infra.yml
   - name: deploy
     plan:
       - get: gcs-artifact-bucket

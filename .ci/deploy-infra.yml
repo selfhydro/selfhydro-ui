@@ -11,7 +11,7 @@ inputs:
 - name: selfhydro-ui
 
 run:
-  path: selfhydro-ui/.ci/build-infra.sh
+  path: selfhydro-ui/.ci/deploy-infra.sh
 
 params:
   GCP-KEY: ((gcpServiceAccount.json))
