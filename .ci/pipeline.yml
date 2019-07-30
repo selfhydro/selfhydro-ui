@@ -85,11 +85,13 @@ jobs:
         params: {bump: patch}
       - task: build
         file: selfhydro-ui/.ci/build.yml
+        vars:
+          version: version/version
       - put: version
         params: {file: version/version}
       - put: gcs-artifact-bucket
         params:
-          file: selfhydro-ui-build/selfhydr-ui-release-*.tar.gz
+          file: selfhydro-ui-build/selfhydro-ui-release-*.tar.gz
           predefined_acl: projectPrivate
   - name: deploy-infra
     plan:
