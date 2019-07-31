@@ -9,10 +9,10 @@ image_resource:
 
 inputs:
 - name: selfhydro-ui
+- name: version
 
 outputs:
 - name: selfhydro-ui-build
 
 run:
   path: selfhydro-ui/.ci/build.sh
-  args: [version]

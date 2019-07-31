@@ -5,12 +5,11 @@ resource_types:
     source:
       repository: frodenas/gcs-resource
 
-resource_types:
-- name: terraform
-  type: docker-image
-  source:
-    repository: ljfranklin/terraform-resource
-    tag: latest
+  - name: terraform
+    type: docker-image
+    source:
+      repository: ljfranklin/terraform-resource
+      tag: latest
 
 resources:
 - name: selfhydro-ui
@@ -71,7 +70,7 @@ resources:
 - name: selfhydro-ui-bucket
   type: google-cloud-storage
   source:
-    bucket: selfhydro-ui
+    bucket: selfhydro.com
     regexp: release-(.*).tgz
     json_key: |
       {
@@ -105,12 +104,21 @@ jobs:
         file: selfhydro-ui/.ci/build.yml
         vars:
           version: version/version
-      - put: version
-        params: {file: version/version}
       - put: gcs-artifact-bucket
         params:
-          file: selfhydro-ui-build/selfhydro-ui-release-*.tar.gz
+          file: selfhydro-ui-build/selfhydro-ui-release-*
           predefined_acl: projectPrivate
+      - put: version
+        params: {file: version/version}
+  - name: deploy
+    plan:
+      - get: gcs-artifact-bucket
+        trigger: true
+        passed: [build]
+      - put: selfhydro-ui-bucket
+        params:
+          file: gcs-artifact-bucket
+          predefined_acl: publicRead
   - name: terraform-plan
     plan:
       - get: selfhydro-ui
@@ -134,11 +142,3 @@ jobs:
           terraform_source: selfhydro-ui/infra
           env_name: prod
           plan_run: true
-  - name: deploy
-    plan:
-      - get: gcs-artifact-bucket
-        passed: [build]
-      - put: selfhydro-ui-bucket
-        params:
-          file: gcs-artifact-bucket
-          predefined_acl: publicRead
