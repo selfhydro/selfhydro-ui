@@ -7,7 +7,7 @@ image_resource:
     repository: google/cloud-sdk
     tag: alpine
 
-input:
+inputs:
   - name: selfhydro-ui
   - name: version
   - name: gcs-artifact-bucket

@@ -67,25 +67,6 @@ resources:
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
       }
 
-- name: selfhydro-ui-bucket
-  type: google-cloud-storage
-  source:
-    bucket: selfhydro.com
-    regexp: release-(.*).tgz
-    json_key: |
-      {
-        "type": "service_account",
-        "project_id": "selfhydro-197504",
-        "private_key_id": "((gcs-service_account.private_key_id))",
-        "private_key": "((gcs-service_account.private_key))",
-        "client_email": "((gcs-service_account.client_email))",
-        "client_id": "((gcs-service_account.client_id))",
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/concourse-deployment%40selfhydro-197504.iam.gserviceaccount.com"
-      }
-
 jobs:
   - name: test
     plan:
@@ -116,6 +97,7 @@ jobs:
         passed: [build]
         trigger: true
       - get: selfhydro-ui
+        trigger: true
       - get: gcs-artifact-bucket
         params:
           version: version/version
