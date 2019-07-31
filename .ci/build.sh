@@ -2,9 +2,11 @@
 
 set -ex
 
+VERSION=$(cat version/version)
 cd ./selfhydro-ui
 
 npm i
 npm run build
 
-mv build ../selfhydro-ui-build/selfhydro-ui-release-$(cat /version/version)
+tar -zcvf selfhydro-ui-release-$VERSION.tar.gz build
+mv selfhydro-ui-release-* ../selfhydro-ui-build

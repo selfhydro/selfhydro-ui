@@ -113,11 +113,14 @@ jobs:
   - name: deploy
     plan:
       - get: gcs-artifact-bucket
+        params:
+          filename: selfhydro-ui-release-*
+          unpack: true
         trigger: true
         passed: [build]
       - put: selfhydro-ui-bucket
         params:
-          file: gcs-artifact-bucket
+          file: gcs-artifact-bucket/selfhydro-ui-release-*
           predefined_acl: publicRead
   - name: terraform-plan
     plan:
