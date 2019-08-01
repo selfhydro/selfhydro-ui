@@ -12,6 +12,6 @@ gcloud config list
 
 tar -xvzf gcs-artifact-bucket/*.tar.gz
 
-gsutil cp -r build gs://www.selfhydro.com
+gsutil cp -r build/** gs://www.selfhydro.com
 
 rm key.json

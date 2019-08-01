@@ -21,6 +21,13 @@ resource "google_storage_bucket" "selfhydro-ui-bucket" {
     }
 }
 
+resource "google_storage_default_object_access_control" "public_rule" {
+  bucket = "${google_storage_bucket.selfhydro-ui-bucket.name}"
+  role   = "READER"
+  entity = "allUsers"
+}
+
+
 resource "google_storage_bucket" "selfhydro-build-artifacts" {
     name = "selfhydro-build-artifacts"
     location = "${var.bucket_location}"
