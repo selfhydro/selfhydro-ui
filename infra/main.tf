@@ -27,6 +27,11 @@ resource "google_storage_default_object_access_control" "public_rule" {
   entity = "allUsers"
 }
 
+resource "google_compute_backend_bucket" "selfhydro_ui_backend" {
+  name        = "selfhydro_ui_backend"
+  bucket_name = "${google_storage_bucket.selfhydro-ui-bucket.name}"
+  enable_cdn  = true
+}
 
 resource "google_storage_bucket" "selfhydro-build-artifacts" {
     name = "selfhydro-build-artifacts"

@@ -97,7 +97,6 @@ jobs:
         passed: [build]
         trigger: true
       - get: selfhydro-ui
-        trigger: true
       - get: gcs-artifact-bucket
         params:
           version: version/version
