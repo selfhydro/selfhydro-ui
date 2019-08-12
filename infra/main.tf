@@ -67,6 +67,22 @@ resource "google_compute_target_http_proxy" "selfhydro-ui" {
 }
 
 resource "google_compute_url_map" "selfhydro-ui" {
-  name        = "selfhydro-ui"
-  default_service = "${google_compute_backend_bucket.selfhydro-ui-backend.self_link}"
+  name            = "selfhydro-ui"
+  description     = "selfhydro frontend url map"
+  default_service = "${google_compute_backend_service.default.self_link}"
+
+  host_rule {
+   hosts        = ["selhydro.com"]
+   path_matcher = "allpaths"
+  }
+
+  path_matcher {
+   name            = "allpaths"
+   default_service = "${google_compute_backend_service.default.self_link}"
+
+   path_rule {
+     paths   = ["/*"]
+     service = "${google_compute_backend_service.default.self_link}"
+   }
+  }
 }
