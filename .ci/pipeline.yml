@@ -127,3 +127,14 @@ jobs:
           terraform_source: selfhydro-ui/infra
           env_name: prod
           plan_run: true
+  - name: terraform-destroy
+    plan:
+      - get: selfhydro-ui
+      - get: terraform
+        trigger: false
+      - put: terraform
+        params:
+          var_files: [selfhydro-ui/infra/prod.tfvars]
+          terraform_source: selfhydro-ui/infra
+          env_name: prod
+          action: destroy

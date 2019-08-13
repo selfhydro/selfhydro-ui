@@ -86,3 +86,9 @@ resource "google_compute_url_map" "selfhydro-ui" {
    }
   }
 }
+
+resource "google_compute_ssl_certificate" "selfhydro-ui" {
+  name        = "selfhydro-ui-certs"
+  private_key = "${file("path/to/private.key")}"
+  certificate = "${file("path/to/certificate.crt")}"
+}
