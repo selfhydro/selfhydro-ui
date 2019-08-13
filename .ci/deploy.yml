@@ -16,4 +16,4 @@ run:
   path: selfhydro-ui/.ci/deploy.sh
 
 params:
-  CREDENTIALS: ((gcpServiceAccount.json))
+  FIREBASE_TOKEN: ((firebaseAccount.token))
