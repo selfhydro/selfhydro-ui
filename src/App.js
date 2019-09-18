@@ -1,11 +1,14 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import SelfhydroState from "./SelfhydroState.js";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">Hello World</header>
+      <header className="App-header">
+        Selfhydro State
+        <SelfhydroState />
+      </header>
     </div>
   );
 }
