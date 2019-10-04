@@ -1,9 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from "react";
+import "@testing-library/jest-dom/extend-expect";
+import {render, fireEvent, wait} from "@testing-library/react";
 
-it('renders without crashing', () => {
-  const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+import App from "./App";
+import Authentication from "./Authentication.js";
+
+jest.mock("./Authentication.js", () => () => <div />);
+
+it("renders without crashing", () => {
+  // jest.doMock("./Authentication.js", () => {
+  //   const Authentication = () => <div />;
+  //   return Authentication;
+  // });
+  const {getByDisplayValue} = render(<App />);
 });
