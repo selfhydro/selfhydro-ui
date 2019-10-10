@@ -1,23 +1,22 @@
 import React, {useState, useEffect} from "react";
-import GetAmbientTemperature from "./Service.js";
+import GetWaterTemperature from "./Service.js";
+
 function SelfhydroState() {
-  const [ambientTemperature, setAmbientTemperature] = useState();
+  const [waterTemperature, setWaterTemperature] = useState();
 
   useEffect(() => {
-    GetAmbientTemperature().then(temperatureResponse => {
+    GetWaterTemperature().then(temperatureResponse => {
       console.log(temperatureResponse);
-      setAmbientTemperature(temperatureResponse.temperature);
+      setWaterTemperature(temperatureResponse.temperature);
     });
   });
 
   return (
     <div>
-      <p>Current Ambient Temperature</p>
-      <span className="state">{ambientTemperature}</span>
+      <p>Current Water Temperature</p>
+      <span className="state">{waterTemperature}</span>
       <br />
-      <button onClick={() => setAmbientTemperature(ambientTemperature + 1)}>
-        Refresh
-      </button>
+      <button onClick={() => GetWaterTemperature()}>Refresh</button>
     </div>
   );
 }

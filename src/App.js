@@ -3,15 +3,19 @@ import "./App.css";
 import SelfhydroState from "./SelfhydroState.js";
 import Authentication from "./Authentication.js";
 
+export const AuthContext = React.createContext();
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Authentication />
-        Selfhydro State
-        <SelfhydroState />
-      </header>
-    </div>
+    <AuthContext.Provider>
+      <div className="App">
+        <header className="App-header">Selfhydro</header>
+        <div>
+          <Authentication />
+          <SelfhydroState />
+        </div>
+      </div>
+    </AuthContext.Provider>
   );
 }
 

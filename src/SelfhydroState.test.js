@@ -4,12 +4,12 @@ import "@testing-library/jest-dom/extend-expect";
 import {render, fireEvent, wait} from "@testing-library/react";
 
 import SelfhydroState from "./SelfhydroState.js";
-import GetAmbientTemperature from "./Service.js";
+import GetWaterTemperature from "./Service.js";
 
 jest.mock("./Service.js");
 
-it("should display temperture", async done => {
-  GetAmbientTemperature.mockImplementation(() => Promise.resolve(12));
+it("should display water temperture", async done => {
+  GetWaterTemperature.mockImplementation(() => Promise.resolve(12));
 
   const {getByDisplayValue} = render(<SelfhydroState />);
   setImmediate(done);
