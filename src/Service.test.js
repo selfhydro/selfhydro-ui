@@ -15,4 +15,9 @@ describe("get ambient temperature", () => {
     var responseReceived = await GetWaterTemperature();
     expect(responseReceived.temperature).toEqual(10);
   });
+
+  it("should get water temperature for a given system", async () => {
+    await GetWaterTemperature("selfhydro");
+    expect(axios.get.mock.calls[1][0]).toContain("selfhydro");
+  });
 });
