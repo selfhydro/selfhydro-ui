@@ -12,6 +12,7 @@ function SelfhydroState() {
   const updateWaterTemperature = () => {
     GetWaterTemperature("selfhydro-default").then(temperatureResponse => {
       setWaterTemperature(temperatureResponse.temperature);
+      setLastRefreshed(temperatureResponse.timestamp);
     });
   };
 
@@ -19,7 +20,7 @@ function SelfhydroState() {
     <div>
       <p>Current Water Temperature</p>
       <span className="state">{waterTemperature}</span>
-      <span className="date">{lastRefreshed}</span>
+      <span className="date">Last Updated: {lastRefreshed}</span>
       <br />
       <button onClick={() => updateWaterTemperature()}>Refresh</button>
     </div>

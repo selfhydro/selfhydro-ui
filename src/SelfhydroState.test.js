@@ -20,14 +20,16 @@ it("should set water temperture", async () => {
   expect(getByText("12").innerHTML).toMatch(/12/);
 });
 
-// it("should display last time the state was updated", async done => {
-//   await GetWaterTemperature.mockImplementation(() => Promise.resolve(12));
-//   setImmediate(done);
-//
-//   const {getByDisplayValue} = render(<SelfhydroState />);
-//   await wait(() => getByDisplayValue("Last Updated: "));
-//   expect();
-// });
+it("should display last time the state was updated", async () => {
+  GetWaterTemperature.mockResolvedValue({
+    temperature: 12,
+    timestamp: "2019-10-18T03:29:04Z"
+  });
+
+  const {getByText} = render(<SelfhydroState />);
+  await wait(() => getByText(/Last Updated:/));
+  expect(getByText(/Last Updated:/).innerHTML).toMatch(/2019-10-18T03:29:04Z/);
+});
 
 it("should update temperature with new temperature when refreshed", async () => {
   GetWaterTemperature.mockResolvedValueOnce({temperature: 12});
