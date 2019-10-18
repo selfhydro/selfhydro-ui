@@ -8,9 +8,7 @@ const GetWaterTemperature = async systemID => {
     response => {
       return response.data;
     },
-    error => {
-      console.log(error);
-    }
+    error => {}
   );
 };
 

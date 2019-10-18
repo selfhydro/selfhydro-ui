@@ -20,7 +20,6 @@ function Authentication(props) {
 }
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-console.log("debugging " + firebaseApp);
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider()

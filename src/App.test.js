@@ -4,13 +4,11 @@ import {render, fireEvent, wait} from "@testing-library/react";
 
 import App from "./App";
 import Authentication from "./Authentication.js";
+import SelfhydroState from "./SelfhydroState.js";
 
 jest.mock("./Authentication.js", () => () => <div />);
+jest.mock("./SelfhydroState.js", () => () => <div />);
 
-it("renders without crashing", () => {
-  // jest.doMock("./Authentication.js", () => {
-  //   const Authentication = () => <div />;
-  //   return Authentication;
-  // });
+it("renders without crashing", async () => {
   const {getByDisplayValue} = render(<App />);
 });

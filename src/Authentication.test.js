@@ -12,7 +12,6 @@ it("should check if user is authenticated", () => {
   });
 
   firebase.initializeApp.mockImplementation(() => {
-    console.log("mock init app");
     return {
       auth: () => {
         return {
