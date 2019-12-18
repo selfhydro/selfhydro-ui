@@ -3,7 +3,7 @@ import GetWaterTemperature from "./Service.js";
 
 function SelfhydroState() {
   const [waterTemperature, setWaterTemperature] = useState();
-  const [lastRefreshed, setLastRefreshed] = useState();
+  const [lastUpdated, setLastUpdated] = useState();
 
   useEffect(() => {
     updateWaterTemperature();
@@ -12,15 +12,15 @@ function SelfhydroState() {
   const updateWaterTemperature = () => {
     GetWaterTemperature("selfhydro-default").then(temperatureResponse => {
       setWaterTemperature(temperatureResponse.temperature);
-      setLastRefreshed(temperatureResponse.timestamp);
+      setLastUpdated(temperatureResponse.timestamp);
     });
   };
 
   return (
     <div>
-      <p>Current Water Temperature</p>
-      <span className="state">{waterTemperature}</span>
-      <span className="date">Last Updated: {lastRefreshed}</span>
+      <p>Current State</p>
+      <span className="state">Water Temperature: {waterTemperature}</span>
+      <span className="date">Last Updated: {lastUpdated}</span>
       <br />
       <button onClick={() => updateWaterTemperature()}>Refresh</button>
     </div>
